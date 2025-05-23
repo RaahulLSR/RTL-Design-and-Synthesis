@@ -118,3 +118,142 @@ o	It is the difference in time between actual arrival time and the required time
 o	A positive slack mean the signal arrive at the flip flop well before the setup time and there is no timing violation.
 o	While a negative slack means there is a timing violation that needs to be corrected. The signal arrives late.
 
+# Why different flavours of gate?
+#### <image5>
+Lets assume the above circuit. Assume the propagation delay of the combinational network is say X ns. And the setup time of flop b is Tsetup\_B  and the clock to Q of flop A is TCQ\_A.
+Now the clock time must be atleast greater than the sum of Clock-to-queue delay + combinational network delay + setup time of flop b.
+
+So from the above statement we could conclude that, inorder for us to not have any setup time violation we need faster combination networks. so we need only faster circuits isn’t it ? But surprisingly the answer is NO!!.
+
+Like setup time requirement we also have hold time requirement, which says
+THOLD < TCQ_A + Tcomb
+
+As we already saw the hold time is the time after the active edge of the clock for which the input must remain stable. So that means the fastest change in flop-A must reflect at the inputs of flop-B only after the hold time.
+Hence in this case we may need circuits with larger delays.
+
+Apart from this there are various other reasons for the requirement of slower cells like Area, Power, Capacitance etc… And always remember the speed doesn’t come at free of cost. Faster cells occupy more real estate as well as consume higher energy when compared their slower logical equivalents. 
+
+Yes faster circuits yield faster system but they are bad interms of power and Area. And holdtime violations have higher probability of occurance. So the best way is to use the different flavours of cell in the optimum ways resulting in a balanced system in all aspects like speed power and area.
+
+# What is .lib
+---
+It is a collection of all the standard logic modules and basic gates like And, Or, Not etc.. . Each logic modules and gates are available in different flavours like 2-input, 3-input etc… The flavour not only varies in the Fan-in and Fan-out but also in the other parameters like speed, area, delay time, etc…
+
+## Library naming convention
+PVT :
+•	P – process
+•	V – voltage
+•	T – temperature
+### Name  : “sky130_fd_sc_hd_tt_025C_1v80”
+here,
+>fd  -- foundry  -- meaning cells are model according to the foundry specification.
+
+> Sc – standard cell 
+
+> Hd – high density – this indicates that the library is optimized for minimal area.
+
+> 025C – meaning the standard verified temperature is 25 degree centigrade
+
+> 1v80 – the operating  voltage is 1.8 V .
+
+The library file contains various information like
+•	The technology used 
+•	What is the delay model used.
+•	What are the units of various parameters used in the library.
+•	It contains the information of the PVT.
+•	The file contains all the delay timing and leakage power for all the input and output combination.
+> The keyword cell marks the beginning of the cell definition in the library.
+
+# Hierarchal vs Flat synthesis
+Hierarchal synthesis is the process in which various sub-modules of a Verilog files or imported as a black box and whatever inside it remains unrevealed.
+Whereas in flat synthesis all the submodules are opened and realized using standard logic gates by the synthesizer.
+The normal method of synthesization will always result in hierarchal synthesis for synthesizing a flat model we need to use the command,
+```
+command : flatten
+```
+Hierarchal synthesis is very helpful,
+•	When there is a lot of instantiation of the same module.
+•	And when we need to split up the whole design into various submodules to make the work of synthesizer easy and accommodatable.
+
+> Additional tip: stacked PMOS is always not preferred. Even the synthesizer tries to avoid stacked PMOS as much as possible.
+
+
+# Flip flop coding style
+## Why flip flop in a circuit ?
+The D flip flops acts like a barrier gate that isolates one combination logic network from another. This means the all the glitches and signal delays are neutralized and separated from one network to another making the design manageable.
+
+## Two types of reset:
+### Synchronous reset:
+
+The reset signal is evaluated only at the active clock edge, which means the reset will occur only the reset signal is active only at the active edge of the clock. This can be achieved in hardware level by adding a mux at the input of the flop.
+
+### Asynchronous reset:
+An asynchronous reset is a reset which resets the system at any moment when the rest signal is high irrespective of the clock/inputs.
+
+> NOTE: while synthesizing the flip flops in yosys we must use the keyword dfflibmap while reading the liberty file for importing the flip flop library.
+
+
+# Optimization
+Synthesizer is an intelligent software which tries to minimize the use of hardware as much as possible. For example multiplying by powers of 2 doesn’t require hardware it is just a left shift of bits in the hardware level inputs are directly connected to the outputs. Hence when we do synthesis of this logic the synthesizer would not infer any hardware but just rewire hence has no work for writing netlist.
+## Combination logic optimization 
+•	Logic simplification 
+•	Constant propagation – direct optimization
+#### <image6>
+•	Boolean logic optimization
+o	This is the process of simplifying the given Boolean expression in simpler and less complex term.
+
+## Sequential logic optimization
+- Sequential constant propagation
+-- Ther might be few situation where the output always remains constant either 0 or 1 irrespective of the clock and input. This situation is called sequential constant propagation. The best example is when the input of a flip flop in grounded. There is no way the output can become high{assuming there is no set input}.
+- State optimization
+-- Optimization of unused states.
+- Retiming
+-- Retiming is the process of splitting the combinational network and redistribute it so that the delays are equally distributed.
+- Sequential logic cloning
+-- Clone a single flop into two same flops but in different paths so that we could counter act for the routing delay by using the positive slack at the separation point.
+-- So the process of doing the optimization is taken care by the synthesizer itself. To do the optimization the command is,
+
+```
+Command : opt_clean -purge
+```
+> This command must be executed after the synthesis before doing the abc or writing the netlist.
+
+## Unused output optimization
+On performing optimization the synthesizer looks only for input and output any action or logic performed on internal signal that in no way affects the primary outputs are neglected by the synthesizer while performing optimization.
+
+# Gate level simulation (GLS)
+Gate level simulation is the process of testing the netlist using the same testbench designed for RTL model. This process verifies that the netlist is logically same as the RTL code. Apart from this we can also run timing aware GLS which checks for timing violation in the design.
+#### <image7>
+
+## Reasons for synthesis simulation mismatch
+
+- Missing sensitivity
+-- Output are monitored only on change in input. If no activity in the input then output is not monitored
+- Blocking and Non – blocking statements
+-- The problem arises only inside the always block.
+- [=] -> blocking assignment 
+--Which means the first assignment is done after which the second assignment occurs
+--The order of the assignment statement matters.
+- [<=] -> non blocking assignment 
+-- Which means all the RHS will be evaluated parallelly and then assigned to the LHS simultaneously.
+-- The order of the assignment statement doesn’t matter
+Always use non blocking statements for sequential circuits. And blocking statements for combinational circuits
+
+
+# If construct
+
+If is mainly used to create priority logic. Always the condition are checked according to the priority order once satisfied all the condition below it are not at all evaluated. This is usually constructed using nested mux.
+The danger with if clause statements is it might lead to inferred latches if bad coding style is followed like if the else block is not defined in the code though it doesn’t show any error the at the hardware level it latches on to the previously exited value using a d latch which the tool synthesizes as a D latch and hence this is called inferred latch. If the circuit is sequential and the behaviour is the intended behaviour then the d-latch is completely fine but in case of combination circuit it creates problem.
+
+# case construct
+Case statements are also realized at the hardware level using a mux. But the problem is if the case statement is incomplete again it would create an inferred latch. So to rectify this, the best practice is to always use default case inside the case statement.
+Similar to this partial assignment will also result in inferred latch. So to avoid it assign all the outputs in all the segments of cases.
+The key difference between case and if-elseif-else clause is that whenever the higher prior condition excutes all the below condition cannot be even evaluated whereas in the case of case statements the code excutes in sequential manner if multiple condition are met it might lead to unpredictable output. This is because case statement check for all the conditions so the best practise is to avoid overlapping conditions in case statements.
+
+# For loop
+The for loop is always used inside the always block. It is always used to multiple evaluation or assigning expression and variables.
+
+# Generate for loop
+The generate for loop is used to generate or instantiate hardware modules multiple time. Whenever a single submodule is instantiated multiple times the generate for loop becomes more handy are creating and connecting them.
+
+
