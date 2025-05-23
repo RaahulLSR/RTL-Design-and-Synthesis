@@ -1,14 +1,30 @@
 # RTL Design and Synthesis
----
-## Introduction
----
+# Introduction
+This repository documents my learnings and practical implementations from the RTL Design and Synthesis course conducted by VSD (VLSI System Design). The course introduces a hands-on approach to digital design using open-source EDA tools such as:
+
+- Icarus Verilog for writing and simulating Verilog RTL code
+
+- GTKWave for visualizing signal waveforms
+
+- Yosys for logic synthesis and gate-level netlist generation
+
+- Sky130 PDK for synthesizing real-world designs using open-source standard cells
+
 # Tools
-#### need to write
+In this section, we explore the key open-source tools used in the RTL design and synthesis flow. Each tool plays a specific role in the hardware design lifecycle, from writing and simulating Verilog code to waveform analysis and logic synthesis:
+
+Icarus Verilog (iverilog): A simulator for compiling and running Verilog designs, enabling functional verification through testbenches.
+
+GTKWave: A waveform viewer that helps visualize signal transitions and verify logical behavior after simulation.
+
+Yosys: A synthesis framework used to convert RTL designs into gate-level netlists. It supports various optimization passes and backend flows.
+
+Sky130 PDK: An open-source Process Design Kit provided by Google and SkyWater, used to map synthesized designs to real-world standard cells.
+
 ## Iverilog
----
 Icarus Verilog, often referred to as iverilog, is an open-source Verilog simulation and synthesis tool. It is used for RTL (Register Transfer Level) design and simulation in digital circuit design.
 Test bench is the setup that is used to test the designed system by applying stimulus to the design and record its output and cross verify it with the golden reference file.
-#### <image 1>
+![image](https://github.com/user-attachments/assets/7ad01840-c79e-49a1-920e-992cbeca20cf)
 The above image describes how the overall testbench is setup. The stimulus generator generates the different combination of the input which are fed into the design and outputs are observed and listed down. Apart from this minor difference test bench is all nothing but one another Verilog file with an instantiation of the designed system. 
 But remember Test-bench Verilog file will not have any primary inputs/outputs but just generates a good combination of inputs and monitors the output.
 
@@ -17,7 +33,8 @@ Simulator always looks for changes in the input. Upon changes in the input outpu
 
 
 The following image best describes the Iverilog based simulation flow.
- #### <image 2>
+![image](https://github.com/user-attachments/assets/bda58486-c5b8-41a2-b1a7-182bf9149810)
+
  
 #### How to use:
 ```
@@ -45,11 +62,13 @@ It opens a new window with a list of the input, output and the internal signals.
 Yosys is a synthesizer that is used to convert the RTL model devolved and verified using simulator into the a netlist. The library file is the file that contains all the standard available cells in a particular flow. The synthesizer reads the design and library file and converts the RTL design into a netlist design. The following diagram illustrates the yosys setup.
 
 
-#### <IMAGE3>
+![image](https://github.com/user-attachments/assets/0d2fd5b5-6323-4882-a8fc-cdb741d68a81)
+
 > NOTE: Since the RTL model has been simulated and verified for working it doesn’t guarantee that the newly synthesized Netlist also will work as intended. There is no guarantee that RTL model and Netlist model will perform in the same manner.
 
 Hence to recheck our design the netlist based model is again put into the test bench for simulation and is verified again. But one good thing in this process is the testbench remains the same.
-#### <IMAGE4>
+![image](https://github.com/user-attachments/assets/dd0c505a-04fa-4377-ba1d-8cf758204d9b)
+
 
 ### How to use:
 Step 1: invoke yosys using the command.
@@ -119,7 +138,8 @@ o	A positive slack mean the signal arrive at the flip flop well before the setup
 o	While a negative slack means there is a timing violation that needs to be corrected. The signal arrives late.
 
 # Why different flavours of gate?
-#### <image5>
+![image](https://github.com/user-attachments/assets/ea45ff50-551e-4de8-a4f3-7c54930dd361)
+
 Lets assume the above circuit. Assume the propagation delay of the combinational network is say X ns. And the setup time of flop b is Tsetup\_B  and the clock to Q of flop A is TCQ\_A.
 Now the clock time must be atleast greater than the sum of Clock-to-queue delay + combinational network delay + setup time of flop b.
 
@@ -198,7 +218,8 @@ Synthesizer is an intelligent software which tries to minimize the use of hardwa
 ## Combination logic optimization 
 •	Logic simplification 
 •	Constant propagation – direct optimization
-#### <image6>
+![image](https://github.com/user-attachments/assets/e4dc865d-7ee0-4334-8221-2907decdb54d)
+
 •	Boolean logic optimization
 o	This is the process of simplifying the given Boolean expression in simpler and less complex term.
 
@@ -223,7 +244,8 @@ On performing optimization the synthesizer looks only for input and output any a
 
 # Gate level simulation (GLS)
 Gate level simulation is the process of testing the netlist using the same testbench designed for RTL model. This process verifies that the netlist is logically same as the RTL code. Apart from this we can also run timing aware GLS which checks for timing violation in the design.
-#### <image7>
+![image](https://github.com/user-attachments/assets/5e1d14cf-a38b-4ae0-99d4-55751b7a6357)
+
 
 ## Reasons for synthesis simulation mismatch
 
