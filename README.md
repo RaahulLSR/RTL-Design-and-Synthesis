@@ -211,6 +211,15 @@ Hierarchal synthesis is very helpful,
 
 > Additional tip: stacked PMOS is always not preferred. Even the synthesizer tries to avoid stacked PMOS as much as possible.
 
+Lets consider the following design,
+![image](https://github.com/user-attachments/assets/d2d3d100-63b8-46d9-8d11-1458964019dc)
+
+if it synthesized in hierarchal model then it would lead to,
+![image](https://github.com/user-attachments/assets/f54998cf-3965-419d-b21f-17d649bcfc43)
+
+if it synthesized in flat manner then,
+![image](https://github.com/user-attachments/assets/4ef788b9-b2fa-486a-a05b-62dcc020ee6b)
+
 
 # Flip flop coding style
 ## Why flip flop in a circuit ?
