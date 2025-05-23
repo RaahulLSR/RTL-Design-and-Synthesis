@@ -1,6 +1,23 @@
 # RTL Design and Synthesis
 # Table of Contents
-- [Introdution](#Introduction)
+- [Introduction](#introduction)
+- [Tools](#tools)
+  - [Icarus Verilog (iverilog)](##iverilog)
+  - [GTKWave](##GTKwave)
+  - [Yosys](##YOSYS)
+  - [Sky130 PDK](#sky130-pdk)
+- [Key Timing Parameters](#Key-timing-parameters)
+  - [Propagation delay](##Propagation-delay)
+  - [Glitch](##Glitch)
+  - [Setup time](##Setup-time)
+  - [Hold time](##Hold-time)
+  - [Clock to Q delay or flip flop propagation delay](##Clock-to-Q-delay-or-flip-flop-propagation-delay)
+  - [Clock skew](##Clock-skew)
+  - [Slack](##Slack)
+- [Why Different Flavours of Gate?](#why-different-flavours-of-gate)
+- [What is .lib?](#what-is-lib)
+  - [Library Naming Convention](#library-naming-convention)
+- [Hierarchal vs Flat synthesis](Hierarchal-vs-Flat-synthesis)
 
 # Introduction
 This repository documents my learnings and practical implementations from the RTL Design and Synthesis course conducted by VSD (VLSI System Design). The course introduces a hands-on approach to digital design using open-source EDA tools such as:
@@ -54,7 +71,7 @@ Command : iverilog -o <simulation_result_file_name.vvp> <design_verilog_file.v> 
 Once the simulated output is generated the it must be executed to generate the VCD file.
 ![image](https://github.com/user-attachments/assets/4804da44-19f1-47cb-a111-2e9c237daa2d)
 
-## GTK wave
+## GTKwave
 GTKWave is a waveform viewer used to visualize the output signals of your Verilog simulations. It reads .vcd files (Value Change Dump) and shows how our signals change over time — just like an oscilloscope but for digital logic inside the computer.
 
 ### How to use it:
