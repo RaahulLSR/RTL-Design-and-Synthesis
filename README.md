@@ -40,6 +40,8 @@ The following image best describes the Iverilog based simulation flow.
 ```
 Command : iverilog <design_verilog_file.v> <Testbench_verilog_file.v>
 ```
+![image](https://github.com/user-attachments/assets/d3ee032e-8525-448d-97f2-3a3440a1f3a0)
+
 This command compiles the provided Verilog files using Icarus Verilog. It creates a default simulation output file named a.out
 
 If we need the output file to be in a specific name then the command is,
@@ -47,6 +49,7 @@ If we need the output file to be in a specific name then the command is,
 Command : iverilog -o <simulation_result_file_name.vvp> <design_verilog_file.v> <Testbench_verilog_file.v>
 ```
 Once the simulated output is generated the it must be executed to generate the VCD file.
+![image](https://github.com/user-attachments/assets/4804da44-19f1-47cb-a111-2e9c237daa2d)
 
 ## GTK wave
 GTKWave is a waveform viewer used to visualize the output signals of your Verilog simulations. It reads .vcd files (Value Change Dump) and shows how our signals change over time — just like an oscilloscope but for digital logic inside the computer.
@@ -57,6 +60,7 @@ Command: gtkwave <VCD_file_name.vcd>
 ```
 
 It opens a new window with a list of the input, output and the internal signals. Among which we can select the required signals and visualize the signals in the form of waves/graphs. This make the output more understandable in GUI format.
+![image](https://github.com/user-attachments/assets/e548ab52-7deb-474c-8084-3e53196747c9)
 
 ## YOSYS
 Yosys is a synthesizer that is used to convert the RTL model devolved and verified using simulator into the a netlist. The library file is the file that contains all the standard available cells in a particular flow. The synthesizer reads the design and library file and converts the RTL design into a netlist design. The following diagram illustrates the yosys setup.
@@ -84,20 +88,26 @@ Step 3: read Verilog file
 ```
 Command : read_verilog <path_to_verilogfiles.v>
 ```
+The below image shows the output of the above codes
+![image](https://github.com/user-attachments/assets/023aed57-2c2f-44d0-8c3c-2081acf76f01)
 Step 4: module to be synthesized
 ```
 Command : synth -top <module_name_to_be_synthesized>
 ```
+On synthesizing the module a inference table is created as below,
+![image](https://github.com/user-attachments/assets/4d52c306-485b-4427-a318-249000c8ff70)
 Step 5:synthesize the netlist
 ```
 Command : abc -liberty <path_to_the_library_file.lib>
 ```
 Output: it gives all the signals that it has inferred from the Verilog design file.
-
+![image](https://github.com/user-attachments/assets/14df84ef-2ea2-4871-a350-d31a210d3393)
 Step 6: graphical version of realized logic.
 ```
 Command : show
 ```
+Ath the end of this step we could see the below graphical representation of the circuit,
+![image](https://github.com/user-attachments/assets/e945fe44-b8b8-4be0-936a-fd96ee6118aa)
 
 Step 7 : create the netlist
 ```
@@ -106,6 +116,10 @@ Command : write_verilog <name_of_the_netlist.v>
 Output : it creates the netlist file
 > Additional flag :  -noattr
 Use case : removes all the unwanted additional information and gives the simplified netlist.
+
+![image](https://github.com/user-attachments/assets/2abcded2-00d7-4eb5-a747-4762cc435e8a)
+The above image shows the netlist file genrated for a good_mux module.
+
 
 The yosys software intelligently maps the RTL model into available standard cells from the library and gives is the netlist which specifies what all standard cells must be used and how it should be connected to relaize that RTL logic.
 
