@@ -2,9 +2,9 @@
 # Table of Contents
 - [Introduction](#introduction)
 - [Tools](#tools)
-  - [Icarus Verilog (iverilog)](##iverilog)
-  - [GTKWave](##GTKwave)
-  - [Yosys](##YOSYS)
+  - [Icarus Verilog (iverilog)](#iverilog)
+  - [GTKWave](#GTKwave)
+  - [Yosys](#YOSYS)
   - [Sky130 PDK](#sky130-pdk)
 - [Key Timing Parameters](#Key-timing-parameters)
   - [Propagation delay](#Propagation-delay)
@@ -18,6 +18,23 @@
 - [What is .lib?](#what-is-lib)
   - [Library Naming Convention](#library-naming-convention)
 - [Hierarchal vs Flat synthesis](Hierarchal-vs-Flat-synthesis)
+- [Flip flop coding style](#Flip-flop-coding-style)
+- [Why flip flop in a circuit ?](Why-flip-flop-in-a-circuit-?)
+- [Two types of reset](#Two-types-of-reset)
+- [Optimization](#Optimization)
+- [Combination logic optimization](#Combination-logic-optimization)
+- [Sequential logic optimization](#Sequential-logic-optimization)
+- [Unused output optimization](#Unused-output-optimization)
+- [Gate level simulation (GLS)](#Gate-level-simulation-(GLS))
+- [Reasons for synthesis simulation mismatch](#Reasons-for-synthesis-simulation-mismatch)
+- [If construct](#If-construct)
+- [case construct](#case-construct)
+- [For loop](#For-loop)
+- [Generate for loop](#Generate-for-loop)
+- [Acknowledgements](#Acknowledgements)
+- [References](#References)
+
+
 
 # Introduction
 This repository documents my learnings and practical implementations from the RTL Design and Synthesis course conducted by VSD (VLSI System Design). The course introduces a hands-on approach to digital design using open-source EDA tools such as:
