@@ -284,22 +284,65 @@ Gate level simulation is the process of testing the netlist using the same testb
 -- The order of the assignment statement doesn’t matter
 Always use non blocking statements for sequential circuits. And blocking statements for combinational circuits
 
+Assume the following design,
+![image](https://github.com/user-attachments/assets/4b246e2f-7146-4fff-bd40-1c82d9d28527)
+
+The RTL model reuslts in,
+![image](https://github.com/user-attachments/assets/f98fd1c2-43d1-47c4-b27b-4101497943f0)
+
+whereas the synthesized model behaves like this,
+![image](https://github.com/user-attachments/assets/2bc5bcb3-8b3e-45b0-929b-915b4f3d0f28)
+
+clearly we could notice a difference in the output signal this shows the synthesis simualtion mismatch.
+
+
+
 
 # If construct
 
 If is mainly used to create priority logic. Always the condition are checked according to the priority order once satisfied all the condition below it are not at all evaluated. This is usually constructed using nested mux.
 The danger with if clause statements is it might lead to inferred latches if bad coding style is followed like if the else block is not defined in the code though it doesn’t show any error the at the hardware level it latches on to the previously exited value using a d latch which the tool synthesizes as a D latch and hence this is called inferred latch. If the circuit is sequential and the behaviour is the intended behaviour then the d-latch is completely fine but in case of combination circuit it creates problem.
 
+for example assume the following design,
+![image](https://github.com/user-attachments/assets/feebf65e-b6c1-47dd-a16d-4bb82a634ea3)
+here the if statement is incomplete when this RTL model is simulated it results in,
+![image](https://github.com/user-attachments/assets/405a85ae-795a-474b-80d9-d7e367ad5db3)
+when synthesized using yosys it gives,
+![image](https://github.com/user-attachments/assets/3a4d4982-f7ba-43da-9cb1-e8316a449c83)
+![image](https://github.com/user-attachments/assets/879e7230-db05-4e09-8a44-c233a0ae48f8)
+the garphical logic and the simulated wave signals show that though the design did not contain a latch a D-latch has been infered.
+
+
+
+
 # case construct
 Case statements are also realized at the hardware level using a mux. But the problem is if the case statement is incomplete again it would create an inferred latch. So to rectify this, the best practice is to always use default case inside the case statement.
 Similar to this partial assignment will also result in inferred latch. So to avoid it assign all the outputs in all the segments of cases.
 The key difference between case and if-elseif-else clause is that whenever the higher prior condition excutes all the below condition cannot be even evaluated whereas in the case of case statements the code excutes in sequential manner if multiple condition are met it might lead to unpredictable output. This is because case statement check for all the conditions so the best practise is to avoid overlapping conditions in case statements.
 
+For example consider the below design,
+![image](https://github.com/user-attachments/assets/49798b90-b716-4a91-99f4-9fe6e7814722)
+
+The simulated output for RTL design shows,
+![image](https://github.com/user-attachments/assets/0b2b70a3-cb91-47a8-9894-71330aa69fb9)
+
+The synthesized design shows,
+![image](https://github.com/user-attachments/assets/5101f97c-4fdd-4288-ae3f-371f5e8762cc)
+
+and the output of netlist simulation is,
+![image](https://github.com/user-attachments/assets/c07f38ff-017e-4066-8662-2bee34872b1f)
+
+this clearly shows a synthesis simulation mismatch case.
+
 # For loop
-The for loop is always used inside the always block. It is always used to multiple evaluation or assigning expression and variables.
+The for loop is always used inside the always block. It is always used to multiple evaluation or assigning expression and variables.The for loop is one most powerful tool that can make the HDL coding coding more smarter smaller and effcient. For example imagine creating a 256x1 mux using regular method it would take a big case statemeent with 256 condition but this can be reduced to just one for loop like this,
+![image](https://github.com/user-attachments/assets/1e4b696d-8f99-457a-bc6e-2ccbb560a350)
+
 
 # Generate for loop
-The generate for loop is used to generate or instantiate hardware modules multiple time. Whenever a single submodule is instantiated multiple times the generate for loop becomes more handy are creating and connecting them.
+The generate for loop is used to generate or instantiate hardware modules multiple time. Whenever a single submodule is instantiated multiple times the generate for loop becomes more handy are creating and connecting them. This for statement is more powerful than we could imagine. Especially in case if we want to perform operations of any kind like, anding, orring, masking, bitwise operation etc... that too on large number of bit say 100 or 1000 bits without generate for loop it is near to impossible. This genrate for loop statement makes all such manually labour intensive work into simple for loops. The below image show cases the use of genrate for loop,
+![image](https://github.com/user-attachments/assets/28624251-6314-4cdf-8948-8a5fdef1818c)
+
 
 # Acknowledgements
 - Kunal Gosh, Co-Founder (VSD Corp. Pvt Ltd)
