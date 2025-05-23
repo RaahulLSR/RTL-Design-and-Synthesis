@@ -1,4 +1,7 @@
 # RTL Design and Synthesis
+# Table of Contents
+- [Introdution](#Introduction)
+
 # Introduction
 This repository documents my learnings and practical implementations from the RTL Design and Synthesis course conducted by VSD (VLSI System Design). The course introduces a hands-on approach to digital design using open-source EDA tools such as:
 
