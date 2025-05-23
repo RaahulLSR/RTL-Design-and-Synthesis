@@ -256,4 +256,8 @@ The for loop is always used inside the always block. It is always used to multip
 # Generate for loop
 The generate for loop is used to generate or instantiate hardware modules multiple time. Whenever a single submodule is instantiated multiple times the generate for loop becomes more handy are creating and connecting them.
 
-
+# Acknowledgements
+Kunal Gosh, Co-Founder (VSD Corp. Pvt Ltd)
+Shon Taware, Teaching Assistant (VSD Corp. Pvt Ltd)
+# References
+https://www.vlsisystemdesign.com/rtl-design-using-verilog-with-sky130-technology/
